@@ -1,0 +1,9 @@
+# Generated review artifacts — never commit these.
+*.html
+review/
+
+# Local scratch
+scratch/
+
+# Python cache
+__pycache__/
