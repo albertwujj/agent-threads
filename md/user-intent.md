@@ -56,10 +56,15 @@ text they struck to remove, `<ins>` is text they added — `The polling
 blocks included — the marks always sit over the rendered text, never the
 markdown source.
 
-Inside a **fenced code block** a mark can carry real newlines —
-`<ins>const x = 1;\nconsole.log(x);</ins>` means the user broke the line
-exactly there, and the break is part of the suggestion. Only code does this:
-in prose a newline is not meaningful, so those marks are always single-line.
+A mark can carry real newlines. In a **fenced code block** —
+`<ins>const x = 1;\nconsole.log(x);</ins>` — the break is part of the
+suggestion: reproduce it exactly. In **prose**, a newline inside `<ins>` is
+the user starting a new line on the rendered surface, where block structure
+is invisible: the break's position is theirs, its markdown form is yours.
+Choose the form from the content and its surroundings — a short title-shaped
+line before related prose may become a heading, an enumeration becomes list
+items, otherwise a new paragraph or a continuation of the block. Keep the
+user's words verbatim and never fold their lines back together.
 
 **The edit is not applied — it is a suggestion for you to make.** Re-read the
 document from disk and apply the marks to the source: struck text is removed,
