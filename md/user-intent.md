@@ -15,15 +15,21 @@ to the markdown surface.
 
 ## Where things live
 
-For a document at `/path/NAME.md`, the store is its hidden sibling:
+For a document at `/path/NAME.md`, the store sits in a folder beside it:
 
 ```
-/path/.NAME-comments.json
+/path/.agent-threads/NAME-comments.json
 ```
 
 `NAME` is the document's basename verbatim (no case or character transformation);
 the markdown extension is replaced by `-comments.json`, matching the review
-store's derivation. `/docs/launch-plan.md` → `/docs/.launch-plan-comments.json`.
+store's derivation. `/docs/launch-plan.md` →
+`/docs/.agent-threads/launch-plan-comments.json`.
+
+The folder keeps the store next to its document without putting an untracked
+file beside every document that has one, so a single `.agent-threads/` line in a
+global gitignore covers the surface everywhere. Read the path from the trigger
+message rather than deriving it.
 
 The viewer creates it; a missing store means no threads yet — never create it
 yourself.
