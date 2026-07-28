@@ -70,6 +70,24 @@ range: origin/main..add-rate-limiter   # branch (or SHA) tip — pinned, not HEA
   L<start>-<end>`** — embed only the new-side line range (a block/hunk). The diff
   is pulled live from git; you only reference it.
 
+## Mark what needs a decision — `CONFIRM:`
+The viewer builds its outline from your headings, so that outline is the only place
+a reviewer sees **where they must act** before opening anything. Put the ask in the
+heading text, not just in the prose underneath:
+
+- Prefix a section whose content needs a decision with **`CONFIRM:`** —
+  `## CONFIRM: per-attempt charge at high retry counts`.
+- **Leave every other heading unmarked**, and say once near the top that unmarked
+  sections need no response. Absence of the marker is the signal; don't add a
+  second marker for "FYI".
+- **All caps on purpose.** It is a label, not prose — the same family as `TODO` /
+  `NOTE` — so it stays legible among ordinary headings and stays greppable
+  (`rg '^#+ CONFIRM:'` enumerates every open ask).
+- **One decision per `CONFIRM:` section.** If a section grew three asks, it is
+  three sections — otherwise a reviewer answers one and the others die quietly.
+- State the ask itself in the section: what you chose, what it costs, and what
+  you'd do instead. "Is this OK?" gives the reviewer nothing to push against.
+
 ## Ordering and grouping — your main levers
 A diff arrives in a fixed, mechanical shape: file by file, top to bottom.
 **Don't blindly follow it** — re-grouping and re-ordering the blocks into a
@@ -126,10 +144,14 @@ by** the server wiring below.
 The server check sits *before* auth (it **builds on** the limiter above) so
 unauthenticated floods are shed early.
 
-## Config knobs
+## CONFIRM: default refill rate
 **Builds on** the limiter: exposes its capacity and refill rate as settings.
 
 :::diff src/config.py L20-28
+
+I defaulted the refill to 10/s, which sheds traffic on the current p99 burst. The
+alternative is 25/s — never sheds, but a real flood reaches auth. Say which you
+want; 10/s is the safer default and the one I'd keep.
 
 ## Tests
 :::diff tests/test_limiter.py
@@ -138,7 +160,8 @@ unauthenticated floods are shed early.
 ## Quality bar — self-check before handing it over
 - [ ] Commit message improved — summary + key context live **there**.
 - [ ] **Highlights only** — trivial/mechanical changes (imports, renames, formatting) left out.
-- [ ] **Trade-offs and undiscussed decisions called out**, with a request to confirm.
+- [ ] **Trade-offs and undiscussed decisions called out** — each its own **`CONFIRM:`** section, stating the choice, its cost, and the alternative.
+- [ ] A line near the top says unmarked sections need **no response**.
 - [ ] Sections grouped **by concept**; related cross-file blocks together.
 - [ ] Order goes **foundational → dependent**; each section says **how it relates**.
 - [ ] Prose adds **why/relationships** — no restated code, no repeated code comments.
