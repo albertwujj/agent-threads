@@ -84,3 +84,24 @@ store), address them:
      or reply and set `"status": "resolved"`.
 4. **Hand back** briefly, per `../contract.md` — a count or one line; never restate the
    per-thread replies in the terminal.
+
+## Threads born from user edits: the commit message
+
+A thread whose first message carries an `[Edit]` block is the user marking a
+change directly on the review page. The mark semantics are the shared ones in
+**`../md/user-intent.md`** ("Threads born from user edits"): `<del>` is text they
+struck, `<ins>` is text they added, the marks sit over the **rendered** text, and
+the edit is **not applied** — it is a suggestion for you to make. A second user
+message on the thread, when present, is their note about the edit.
+
+On a review page these arrive anchored to `"(commit message)"`. Apply the intent
+by **amending the commit message** (`git commit --amend` on the range tip):
+
+- The rendered commit body reflows raw lines into paragraphs, so the marks are
+  over the reflowed text — apply them to the real message and re-wrap lines
+  yourself. The user's words express intent, not final wording: fix grammar,
+  complete fragments, keep their meaning and voice, and keep the nearest
+  `commit-message.md` style.
+- Amending moves the tip SHA: update the package's `range:` if it pins the tip
+  by SHA, then let the re-render re-anchor (the old quote goes `lost` — reply
+  and set `"status": "resolved"` as usual).
