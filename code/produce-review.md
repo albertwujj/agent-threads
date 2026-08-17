@@ -42,9 +42,10 @@ Create the folder; the store is the `-comments.json` sibling.
    up the tree; a review snapshot needs **no** CI/CD trailers.
 3. **Write the package** at that path — a markdown file that orders and explains the change. This is
    the real work; follow **`authoring.md`** for the format and craft.
-4. **Hand off a launch link.** Give the user a `review://` link to your package:
+4. **Hand off a launch link.** Give the user a `review://` link to your package — the scheme and the
+   absolute path with nothing between them:
    ```
-   review://<absolute path to your package>
+   review:///abs/path/to/repo/.git/review/<branch>/<branch>.md
    ```
    Clicking it renders the review (your package + the live git diff) and opens it for them. You
    don't generate or touch any `.html` — rendering is the viewer's job. When you edit the package
