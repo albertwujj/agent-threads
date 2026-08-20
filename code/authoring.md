@@ -81,9 +81,10 @@ range: origin/main..add-rate-limiter   # branch (or SHA) tip — pinned, not HEA
 A directive that fails to parse (`L42`, `L42:50`, `42-50`), a `:::code` with no
 range or past the end of the file, or a `:::diff` range with no changes renders
 as a problem card where the block would be, and the review shows an amber
-**package issues** banner listing them with a **Notify agent** button. Clicking
-it prompts you with the path of `<package-stem>-issues.json`, the same list; fix
-the package and the open review re-renders.
+**directive errors** banner listing them with a **Notify agent** button. Clicking
+it prompts you with the path of `<package-stem>-errors.json`, the same list; fix
+the package and the open review re-renders. Changed lines you leave out are never
+flagged.
 
 ## Mark what needs a decision — `CONFIRM:`
 The viewer builds its outline from your headings, so that outline is the only place

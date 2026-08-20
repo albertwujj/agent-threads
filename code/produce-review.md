@@ -34,9 +34,8 @@ Create the folder; the store is the `-comments.json` sibling.
    `HEAD~1`); a `base: <ref>` scope is rejected. The review always opens, but if it's out of date —
    uncommitted *tracked* changes (untracked are fine), commits past the tip, or a different branch —
    it shows a red banner; the user can click **Notify agent** and you'll be prompted to bring it
-   current. Package problems (a directive that fails to parse, a bad range) show an amber
-   **package issues** banner; its Notify prompts you with the path of `<stem>-issues.json`, the
-   list to fix. So **commit your work** before handing off. Make sure it's **only the user's
+   current. A directive that fails to parse or a bad range shows an amber **directive errors**
+   banner; its Notify prompts you with the path of `<stem>-errors.json`, the list to fix. So **commit your work** before handing off. Make sure it's **only the user's
    change**; if the checkout carries unrelated work, scope it out first rather than reviewing
    someone else's files.
 2. **Improve the commit message.** The summary and key context live there (it heads the review) —
