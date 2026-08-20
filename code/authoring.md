@@ -75,6 +75,15 @@ range: origin/main..add-rate-limiter   # branch (or SHA) tip — pinned, not HEA
   tight as a diff block; a range is required. The paragraph right before the
   directive renders beside the code, so put the why there. If the slice touches
   changed lines the viewer marks them; show changed code with `:::diff`.
+- **Range form is exact**: `L<start>-<end>`, both ends, dash between. A single
+  line is `L42-42`.
+
+A directive that fails to parse (`L42`, `L42:50`, `42-50`), a `:::code` with no
+range or past the end of the file, or a `:::diff` range with no changes renders
+as a problem card where the block would be, and the review shows an amber
+**package issues** banner listing them with a **Notify agent** button. Clicking
+it prompts you with the path of `<package-stem>-issues.json`, the same list; fix
+the package and the open review re-renders.
 
 ## Mark what needs a decision — `CONFIRM:`
 The viewer builds its outline from your headings, so that outline is the only place
