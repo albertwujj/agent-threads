@@ -88,9 +88,11 @@ meaning and voice. Reply describing what you did and set
 ## Round trip
 
 Per open thread: interpret and edit the document where warranted → keep
-anchors current → append your reply → set `"status": "resolved"`. Append only;
-hand back one brief terminal line, not a restatement (both rules in
-`../contract.md`).
+anchors current → append your reply → set `"status": "resolved"`. The order
+is a rule, not optional: the document write lands first, so `resolved` never
+claims a change the user cannot see yet (`../contract.md`,
+resolve-after-visibility). Append only; hand back one brief terminal line,
+not a restatement (both rules in `../contract.md`).
 
 Leave a thread `"open"` only when you are genuinely **blocked** — you cannot
 do what they asked without a decision or an answer from them — and say

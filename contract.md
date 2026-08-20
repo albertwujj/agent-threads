@@ -75,6 +75,12 @@ This is yours alone on both surfaces. The user never closes a thread — they
 comment, and a follow-up reopens it. So `resolved` always means you said the
 work was done.
 
+**Resolve after the work is visible.** Each surface shows work on its own
+clock: markdown renders the saved document, review renders the committed
+range. Set `resolved` only once the change it claims is already in front of
+the user — on markdown after the document write, on review after the commit.
+The fold is the user's receipt that the final state is on screen.
+
 ## Titles (review only)
 
 When a thread's `title` is empty, set it while working the thread: a short intent

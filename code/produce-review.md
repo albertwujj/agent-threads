@@ -72,20 +72,24 @@ store), address them:
    directory, then each parent up the direct chain only — closest wins,
    siblings/children never searched) if one exists, and hold any shared-checkout
    lock your workflow requires; edit code where warranted, keeping `snippet` (and
-   `line`) current when your change touches an anchored line; append your reply and
-   set `"status": "resolved"`. Leave a thread `"open"` only when you are genuinely
-   **blocked** — you cannot do what they asked without an answer from them — and say
-   exactly what you need. Doing their ask beats asking about it.
+   `line`) current when your change touches an anchored line. Hold replies and
+   status for step 4 — the review renders committed work only, so a `resolved`
+   written now claims a change the user cannot see yet.
 3. **Commit your code edits** — the diff is pulled from the committed range, so uncommitted
    tracked changes flag the review out of date (red banner) instead of showing your update. If the
    package's `range:` pins the tip by SHA, advance it. **Re-render** happens when you **edit the
    package** (the open review auto-refreshes), when it's re-opened (the `review://` link), or on
    refocus — it re-anchors every comment against the new diff and stamps `anchor_status`:
    - `ok` / `moved` — handled for you (code line auto-updated; a quote still on the page stays put).
-   - `lost` — the anchored code/quote is gone (you rewrote or removed it). **Your worklist:**
-     repoint the anchor (update its `snippet`, and `line` for code) to where the concept now lives,
-     or reply and set `"status": "resolved"`.
-4. **Hand back** briefly, per `../contract.md` — a count or one line; never restate the
+   - `lost` — the anchored code/quote is gone (you rewrote or removed it). Repoint the
+     anchor (update its `snippet`, and `line` for code) to where the concept now lives
+     before you reply.
+4. **Reply and resolve** — the review now shows your work, so the store can say it is done:
+   on each thread, append your reply and set `"status": "resolved"`. Leave a thread
+   `"open"` only when you are genuinely **blocked** — you cannot do what they asked
+   without an answer from them — and say exactly what you need. Doing their ask beats
+   asking about it.
+5. **Hand back** briefly, per `../contract.md` — a count or one line; never restate the
    per-thread replies in the terminal.
 
 ## Threads born from user edits: the commit message
