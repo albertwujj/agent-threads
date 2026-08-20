@@ -76,9 +76,11 @@ store), address them:
    set `"status": "resolved"`. Leave a thread `"open"` only when you are genuinely
    **blocked** — you cannot do what they asked without an answer from them — and say
    exactly what you need. Doing their ask beats asking about it.
-3. **Re-render** happens when you **edit the package** (the open review auto-refreshes), when it's
-   re-opened (the `review://` link), or on refocus — it re-anchors every comment against the new
-   diff and stamps `anchor_status`:
+3. **Commit your code edits** — the diff is pulled from the committed range, so uncommitted
+   tracked changes flag the review out of date (red banner) instead of showing your update. If the
+   package's `range:` pins the tip by SHA, advance it. **Re-render** happens when you **edit the
+   package** (the open review auto-refreshes), when it's re-opened (the `review://` link), or on
+   refocus — it re-anchors every comment against the new diff and stamps `anchor_status`:
    - `ok` / `moved` — handled for you (code line auto-updated; a quote still on the page stays put).
    - `lost` — the anchored code/quote is gone (you rewrote or removed it). **Your worklist:**
      repoint the anchor (update its `snippet`, and `line` for code) to where the concept now lives,
