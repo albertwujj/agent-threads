@@ -69,6 +69,12 @@ range: origin/main..add-rate-limiter   # branch (or SHA) tip — pinned, not HEA
 - **`:::diff <path>`** — embed that file's whole diff. **`:::diff <path>
   L<start>-<end>`** — embed only the new-side line range (a block/hunk). The diff
   is pulled live from git; you only reference it.
+- **`:::code <path> L<start>-<end>`** — embed that slice of the file as it stands
+  at the range tip, with no diff. Use it for code the change depends on or copies:
+  a callee the new code calls, the existing shape a new block follows. Slice it as
+  tight as a diff block; a range is required. The paragraph right before the
+  directive renders beside the code, so put the why there. If the slice touches
+  changed lines the viewer marks them; show changed code with `:::diff`.
 
 ## Mark what needs a decision — `CONFIRM:`
 The viewer builds its outline from your headings, so that outline is the only place
@@ -109,6 +115,9 @@ conceptual narrative is the point, and you have minimal restriction:
   guards / replaces). Those relationships aren't visible in any single spot — they
   are exactly what you add.
 - **Do not** restate **what** the code does.
+- **Show, don't describe, the unchanged code a block leans on.** A callee the new
+  code calls, or the shape it copies, is a `:::code` slice under your one-line why,
+  not a paragraph restating it.
 - **Do not** repeat **code comments.** Code comments describe the code; if it's
   already in a comment, the reviewer will read it in the diff. Your prose is for
   the reasoning and cross-block story that *isn't* in the code.
@@ -139,6 +148,11 @@ The bucket admits a request only when it holds ≥ 1 token. Introduced first; **
 by** the server wiring below.
 
 :::diff src/limiter.py
+
+The check slots into `handle()` between parse and auth; the existing order below
+(unchanged) is why it can sit there without touching auth.
+
+:::code src/server.py L70-84
 :::diff src/server.py L88-95
 
 The server check sits *before* auth (it **builds on** the limiter above) so
@@ -168,3 +182,4 @@ want; 10/s is the safer default and the one I'd keep.
 - [ ] Change-talk (the delta's what/why) lives in the **package** — never as a code comment narrating the change.
 - [ ] Code that needed explaining got a **code comment** (part of the change), not review prose.
 - [ ] Non-obvious blocks called out at **line granularity**; routine ones whole-file.
+- [ ] Unchanged code the reader needs to judge the change (a callee, a shape copied) shown with **`:::code`**, sliced tight, the why in the paragraph before it.

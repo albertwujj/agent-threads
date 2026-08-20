@@ -63,9 +63,11 @@ store), address them:
    threads (`../md/user-intent.md`). Review anchors extend the shared anchor:
    ```jsonc
    "anchor": { "path": "src/x.py", "snippet": "if tokens <= 0:",
-               "side": "new", "line": "42",  // side/line code only; a quote on
-                                             // prose/commit/preview omits them
-               "context": "" }               // (path is then "(note N)" etc.)
+               "side": "new", "line": "42",  // side/line on code lines — a diff
+                                             // cell or a :::code slice (always
+                                             // side new); a quote on prose/
+               "context": "" }               // commit/preview omits them (path
+                                             // is then "(note N)" etc.)
    ```
 2. **Work each non-resolved thread** per `../contract.md`:
    **before editing any code**, resolve the nearest `coding-guide.md` (this file's
