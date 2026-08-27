@@ -17,7 +17,13 @@ lifecycle.
 
 A thread's truth is the store with the journal applied in file order. Every
 reader, the viewer included, merges the two at read time, so an append is all
-it takes for your reply to surface.
+it takes for your reply to surface. The store's `status` field alone
+overstates what is open — your own resolutions live in the journal — so
+always read both files.
+
+**What needs you:** every thread that is `open` after the merge with a user
+message last. One you answered and left `open` is the user's move; a
+`resolved` one with newer user words is reopened and needs you again.
 
 ## Store schema (you read, never write)
 
