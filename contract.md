@@ -17,13 +17,14 @@ lifecycle.
 
 A thread's truth is the store with the journal applied in file order. Every
 reader, the viewer included, merges the two at read time, so an append is all
-it takes for your reply to surface. The store's `status` field alone
-overstates what is open — your own resolutions live in the journal — so
-always read both files.
+it takes for your reply to surface. Always read both files: your own
+resolutions live only in the journal.
 
-**What needs you:** every thread that is `open` after the merge with a user
-message last. One you answered and left `open` is the user's move; a
-`resolved` one with newer user words is reopened and needs you again.
+**What needs you:** every thread that is `open` after the merge whose last
+message is the user's. The last-message test settles both edge cases: a
+thread where you replied and set `open` (blocked) has your word last, so it
+waits on the user, not you; a `resolved` thread with a newer user message
+under it is reopened and needs you again.
 
 ## Store schema (you read, never write)
 
@@ -40,7 +41,9 @@ message last. One you answered and left `open` is the user's move; a
     },                               // enclosing line or paragraph it sits in
     "anchor_status": "ok",       // ok | moved | lost — review stamps it;
                                  // markdown doesn't (it anchors by snippet live)
-    "status": "open",            // open (blocked on the user) | resolved (done)
+    "status": "open",            // legacy stores only (pre-journal, agent-
+                                 // written); absent in new stores — effective
+                                 // status comes from the merge, absent = open
     "messages": [ { "author": "user", "body": "…", "ts": 1719500000000, "turn": 4 } ]
   } ] }
 ```
