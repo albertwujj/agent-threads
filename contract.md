@@ -41,9 +41,6 @@ under it is reopened and needs you again.
     },                               // enclosing line or paragraph it sits in
     "anchor_status": "ok",       // ok | moved | lost — review stamps it;
                                  // markdown doesn't (it anchors by snippet live)
-    "status": "open",            // legacy stores only (pre-journal, agent-
-                                 // written); absent in new stores — effective
-                                 // status comes from the merge, absent = open
     "messages": [ { "author": "user", "body": "…", "ts": 1719500000000, "turn": 4 } ]
   } ] }
 ```
@@ -52,9 +49,10 @@ Surfaces extend the anchor: review code anchors add `path`/`side`/`line`;
 markdown anchors add `heading`, and a markdown comment on an **image** adds
 `src` (the image's authored path) with `snippet` holding the image's alt text
 as a label — read it as a comment on that image, and update `src` if you move
-or replace it. `title` and the `turn` fields are optional and absent in older
-stores. Older stores may also carry your messages inline in `messages` —
-still valid to read; new replies go to the journal only.
+or replace it. `title` and the `turn` fields are optional. There is no
+`status` field in the store: a thread's status lives entirely in your
+journal — every thread is open until a journal event says otherwise, and a
+user follow-up newer than your `resolved` reopens it.
 
 ## Journal events
 
