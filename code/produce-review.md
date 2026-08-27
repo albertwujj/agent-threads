@@ -15,7 +15,8 @@ shared across worktrees, safe from `git clean`):
 
 ```
 <git-common-dir>/review/<branch>/<branch>.md             # your package — you write it (see authoring.md)
-<git-common-dir>/review/<branch>/<branch>-comments.json  # the comment store (shared with the user)
+<git-common-dir>/review/<branch>/<branch>-comments.json  # the comment store — the viewer writes it, you read it
+<git-common-dir>/review/<branch>/<branch>-agent.jsonl    # your journal — you append replies/status here
 ```
 
 Fill in the path above:
@@ -58,10 +59,12 @@ The user reads the review and leaves inline comments — on **your explanations*
 When they say they've commented (or click **Send to agent**, which drops a one-line pointer to the
 store), address them:
 
-1. **Read the store** (the package's `-comments.json` sibling). The schema, message
-   rules (edit the JSON directly, append only), and status lifecycle are the shared
-   contract in **`../contract.md`** — the same store model carries markdown-document
-   threads (`../md/user-intent.md`). Review anchors extend the shared anchor:
+1. **Read the store** (the package's `-comments.json` sibling — read-only for
+   you; everything you say or set is appended to the `-agent.jsonl` journal
+   beside it, one JSON event per line). The files, event rules, and status
+   lifecycle are the shared contract in **`../contract.md`** — the same model
+   carries markdown-document threads (`../md/user-intent.md`). Review anchors
+   extend the shared anchor:
    ```jsonc
    "anchor": { "path": "src/x.py", "snippet": "if tokens <= 0:",
                "side": "new", "line": "42",  // side/line on code lines — a diff
@@ -75,9 +78,11 @@ store), address them:
    directory, then each parent up the direct chain only — closest wins,
    siblings/children never searched) if one exists, and hold any shared-checkout
    lock your workflow requires; edit code where warranted, keeping `snippet` (and
-   `line`) current when your change touches an anchored line. Hold replies and
-   status for step 4 — the review renders committed work only, so a `resolved`
-   written now claims a change the user cannot see yet.
+   `line`) current via `anchor` events when your change touches an anchored line.
+   **Append your reply as you finish each thread** — it streams into the open
+   review while you work. Hold only `status` for step 4 — the review renders
+   committed work, so a `resolved` written now claims a change the user cannot
+   see yet.
 3. **Commit your code edits** — the diff is pulled from the committed range, so uncommitted
    tracked changes flag the review out of date (red banner) instead of showing your update. If the
    package's `range:` pins the tip by SHA, advance it. **Re-render** happens when you **edit the
@@ -85,13 +90,13 @@ store), address them:
    refocus — it re-anchors every comment against the new diff and stamps `anchor_status`:
    - `ok` / `moved` — handled for you (code line auto-updated; a quote still on the page stays put).
    - `lost` — the anchored code/quote is gone (you rewrote or removed it). Repoint the
-     anchor (update its `snippet`, and `line` for code) to where the concept now lives
-     before you reply.
-4. **Reply and resolve** — the review now shows your work, so the store can say it is done:
-   on each thread, append your reply and set `"status": "resolved"`. Leave a thread
-   `"open"` only when you are genuinely **blocked** — you cannot do what they asked
-   without an answer from them — and say exactly what you need. Doing their ask beats
-   asking about it.
+     anchor (an `anchor` event updating `snippet`, and `line` for code) to where the
+     concept now lives before you reply.
+4. **Resolve** — the review now shows your work, so the journal can say it is done:
+   append a `"status": "resolved"` event per finished thread (with the reply, if you
+   have not already streamed it in step 2). Leave a thread `"open"` only when you are
+   genuinely **blocked** — you cannot do what they asked without an answer from them —
+   and say exactly what you need. Doing their ask beats asking about it.
 5. **Hand back** briefly, per `../contract.md` — a count or one line; never restate the
    per-thread replies in the terminal.
 

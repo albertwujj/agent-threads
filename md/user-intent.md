@@ -9,16 +9,17 @@ user is reading — and editing — the document live while you work; their
 comments and edits arrive as threads. Being pointed this way means the host
 supports the protocol; just work the threads.
 
-The thread store, message rules, and status lifecycle are the shared
-contract in **`../contract.md`** — read it first. This runbook is what's specific
-to the markdown surface.
+The two files, the journal event rules, and the status lifecycle are the
+shared contract in **`../contract.md`** — read it first. This runbook is
+what's specific to the markdown surface.
 
 ## Where things live
 
-For a document at `/path/NAME.md`, the store sits in a folder beside it:
+For a document at `/path/NAME.md`, the pair sits in a folder beside it:
 
 ```
-/path/.agent-threads/NAME-comments.json
+/path/.agent-threads/NAME-comments.json   # the store — the viewer writes it, you read it
+/path/.agent-threads/NAME-agent.jsonl     # your journal — you append replies/status here
 ```
 
 `NAME` is the document's basename verbatim (no case or character transformation);
@@ -31,8 +32,8 @@ file beside every document that has one, so a single `.agent-threads/` line in a
 global gitignore covers the surface everywhere. Read the path from the trigger
 message rather than deriving it.
 
-The viewer creates it; a missing store means no threads yet — never create it
-yourself.
+The viewer creates the store; a missing store means no threads yet — never
+create it yourself. The journal is yours: your first append creates it.
 
 ## Anchors on this surface
 
@@ -88,11 +89,13 @@ meaning and voice. Reply describing what you did and set
 ## Round trip
 
 Per open thread: interpret and edit the document where warranted → keep
-anchors current → append your reply → set `"status": "resolved"`. The order
-is a rule, not optional: the document write lands first, so `resolved` never
-claims a change the user cannot see yet (`../contract.md`,
-resolve-after-visibility). Append only; hand back one brief terminal line,
-not a restatement (both rules in `../contract.md`).
+anchors current (`anchor` events) → append your reply and its
+`"status": "resolved"` to the journal — one event line can carry both. The
+order is a rule, not optional: the document write lands first, so `resolved`
+never claims a change the user cannot see yet (`../contract.md`,
+resolve-after-visibility). Work thread by thread, appending as each one
+finishes — the viewer streams your replies in as they land. Hand back one
+brief terminal line, not a restatement (both rules in `../contract.md`).
 
 Leave a thread `"open"` only when you are genuinely **blocked** — you cannot
 do what they asked without a decision or an answer from them — and say
