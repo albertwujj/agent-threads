@@ -97,6 +97,12 @@ resolve-after-visibility). Work thread by thread, appending as each one
 finishes — the viewer streams your replies in as they land. Hand back one
 brief terminal line, not a restatement (both rules in `../contract.md`).
 
+After your document writes land, sweep the store: any thread whose `snippet`
+no longer appears in the rendered document gets a re-anchor event pointing it
+at its passage's current text (snippets match rendered text, never markdown
+source). Orphaned resolved threads fall to an unlabeled pile at the article
+end, where the user will not find your replies.
+
 Leave a thread `"open"` only when you are genuinely **blocked** — you cannot
 do what they asked without a decision or an answer from them — and say
 exactly what you need in your reply. Everything you resolved folds into a

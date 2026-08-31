@@ -78,7 +78,9 @@ is one line.
 - Stamp `ts` and `turn` on every event.
 - Keep anchors current: when your own edit changes the anchored text, append
   an `anchor` event updating `snippet` (and surface-specific fields) so the
-  thread stays placed.
+  thread stays placed. Check every thread in the store, not only the one you
+  are working: chained edits on one passage orphan every earlier thread
+  anchored to it.
 - When every open thread has its disposition, the turn is over: no further
   journal writes until the user's next send.
 
