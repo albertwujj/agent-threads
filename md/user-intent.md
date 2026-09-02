@@ -83,8 +83,11 @@ read the two together.
 **The user's words express intent, not final wording.** Re-read the document
 from disk, then apply the intent: fix grammar and spelling, complete
 fragments, and adjust surrounding text for consistency. Keep the user's
-meaning and voice. Reply describing what you did and set
-`"status": "resolved"`.
+meaning and voice. This holds for an edit that arrives with no note as much
+as for one with a question attached: the absence of a note does not make the
+wording decided, so an awkward phrase is revised the same way, and the reply
+names what changed so the user can push back. Reply describing what you did
+and set `"status": "resolved"`.
 
 ## Round trip
 
