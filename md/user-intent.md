@@ -89,6 +89,15 @@ wording decided, so an awkward phrase is revised the same way, and the reply
 names what changed so the user can push back. Reply describing what you did
 and set `"status": "resolved"`.
 
+**Keep the edit's footprint small.** The change lands in the sentence the user
+marked and in the sentences directly connected to it: the ones that now repeat,
+contradict, or dangle off it. Anything wider you would change goes in the reply
+as numbered proposals, each with its intention, and the thread is left
+`"open"` so the user sees them; when they answer, apply what they took and
+resolve. A wider change buries the user's own edit inside yours, and they cannot
+evaluate what they cannot track. This is a soft rule: when the note or the
+marks themselves ask for a larger change, make it directly.
+
 ## Round trip
 
 Per open thread: interpret and edit the document where warranted → keep
