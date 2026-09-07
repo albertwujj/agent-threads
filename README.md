@@ -1,31 +1,27 @@
-# agent-threads — human↔agent review threads
+# agent-threads
 
-This repo is the **agent-facing spec** for a threaded human↔agent conversation
-anchored to content and persisted as a `-comments.json` store. One shared model
-carries two surfaces:
+Two loops for working with a coding agent in writing. You comment on what it shows you, and it answers in place.
 
-- a **code-diff review** — an agent writes a markdown *review package* that
-  references and explains a change; the human reads it against the live
-  `git diff` and comments, and the comments flow back to the agent.
-- a **live markdown document** — the human comments on and edits a document the
-  host renders; those comments and edits (intent, not final wording) reach the
-  agent the same way.
+- **Plans and documents.** A markdown document opens rendered in your terminal. You write on it, as comments or as edits to the text itself, and the agent edits the source and replies where you wrote.
+- **Curated reviews.** When the agent finishes a change, it writes a review of the parts that need your judgment, ordered and explained. You comment inline, on the code or on its reasoning, and it fixes and replies in the thread.
 
-It's intended for a **terminal host that supports the protocol**: the host
-renders each surface and carries the conversation back to the agent. The renderer
-and viewer live in that host; this repo is just the spec. **Nothing to install here.**
+Both run on one thread store, a JSON file the host keeps for each document or review, so a host that renders one renders the other.
 
-[agent-term](https://github.com/albertwujj/agent-term) is the reference host — it
-renders both surfaces and carries inline comments back to the agent
-([see it in action](https://github.com/albertwujj/agent-term#it-reviews-its-own-work-you-review-what-matters)).
+## Adding it
 
-## Docs
+Clone this repo into `ai/` in your project, and leave `ai/` out of `.gitignore` so `@` pickers can see it. One clone serves both loops. A host that supports the protocol does the rest: [agent-term](https://github.com/albertwujj/agent-term) is the reference host, and its docs show the loops in use ([plan with it](https://github.com/albertwujj/agent-term/blob/main/docs/plan.md), [the curated review](https://github.com/albertwujj/agent-term/blob/main/docs/review.md)).
 
-- **[contract.md](contract.md)** — the shared thread-store contract (schema, message rules, status lifecycle) both surfaces build on. **Read this first.**
-- **code/** — the code-diff review surface:
-  - **[code/produce-review.md](code/produce-review.md)** — the agent runbook for the review loop (trigger → write the package → review → respond to comments). The user invokes it with `@produce-review.md`.
-  - **[code/authoring.md](code/authoring.md)** — how to write a review package (the format + the craft).
-- **md/** — the live-markdown surface:
-  - **[md/user-intent.md](md/user-intent.md)** — the agent runbook for threads on a live markdown document (comments + user edits as intent).
-- **discussion/** — splitting a multi-topic conversation onto the live-markdown surface:
-  - **[discussion/split.md](discussion/split.md)** — the agent runbook: one document per topic, each carried by the markdown thread loop. The user invokes it with `@split.md`, bare or with the questions to split out.
+## Using it
+
+- **A review.** Name `code/produce-review.md` in a prompt; `@produce-r` completes to it. The agent produces the review and prints its link, and the host opens it.
+- **A document.** Open it in the host's viewer and write on it. The host points the agent at `md/user-intent.md` with each send.
+- **A conversation with several topics.** Name `discussion/split.md` (`@split`), bare or with the questions to split out. The agent gives each topic a document of its own, carried by the document loop.
+
+## The docs
+
+The runbooks are written for the agent. You do not need to read them to use the loops.
+
+- [contract.md](contract.md): the thread store both surfaces share, with its files, message rules and status lifecycle.
+- [code/produce-review.md](code/produce-review.md): the review loop, from trigger to reply. [code/authoring.md](code/authoring.md) is how a review is written.
+- [md/user-intent.md](md/user-intent.md): the document loop, with comments and edits read as intent.
+- [discussion/split.md](discussion/split.md): one document per topic.
