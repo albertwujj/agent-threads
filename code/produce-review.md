@@ -41,7 +41,7 @@ Create the folder; the store is the `-comments.json` sibling.
    someone else's files.
 2. **Improve the commit message.** The summary and key context live there (it heads the review) —
    don't repeat them in the package. Follow the commit style in the nearest **`commit-message.md`**
-   up the tree; a review snapshot needs **no** CI/CD trailers.
+   or similar up the tree, if the project has one; a review snapshot needs **no** CI/CD trailers.
 3. **Write the package** at that path — a markdown file that orders and explains the change. This is
    the real work; follow **`authoring.md`** for the format and craft.
 4. **Hand off a launch link.** Give the user a `review://` link to your package — the scheme and the
@@ -74,7 +74,7 @@ store), address them:
                                              // is then "(note N)" etc.)
    ```
 2. **Work each non-resolved thread** per `../contract.md`:
-   **before editing any code**, resolve the nearest `coding-guide.md` (this file's
+   **before editing any code**, resolve the nearest `coding-guide.md` or similar (this file's
    directory, then each parent up the direct chain only — closest wins,
    siblings/children never searched) if one exists, and hold any shared-checkout
    lock your workflow requires; edit code where warranted, keeping `snippet` (and
@@ -115,8 +115,8 @@ by **amending the commit message** (`git commit --amend` on the range tip):
 - The rendered commit body reflows raw lines into paragraphs, so the marks are
   over the reflowed text — apply them to the real message and re-wrap lines
   yourself. The user's words express intent, not final wording: fix grammar,
-  complete fragments, keep their meaning and voice, and keep the nearest
-  `commit-message.md` style.
+  complete fragments, keep their meaning and voice, and keep the style of the
+  nearest `commit-message.md` or similar, if the project has one.
 - Amending moves the tip SHA: update the package's `range:` if it pins the tip
   by SHA, then let the re-render re-anchor (the old quote goes `lost` — reply
   and set `"status": "resolved"` as usual).

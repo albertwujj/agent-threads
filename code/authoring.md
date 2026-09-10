@@ -33,7 +33,8 @@ the important parts stand out — **don't aim for completeness.**
 
 ## The summary lives in the commit message — don't repeat it here
 **Improve the commit message** — clear subject; body with the summary and any key
-context, per the nearest `commit-message.md` up the tree. The package itself is
+context, per the nearest `commit-message.md` or similar up the tree, if the project
+has one. The package itself is
 **only** the organized, explained diff.
 
 ## File format
