@@ -35,6 +35,18 @@ message rather than deriving it.
 The viewer creates the store; a missing store means no threads yet — never
 create it yourself. The journal is yours: your first append creates it.
 
+To see what needs you, run the tool beside this runbook rather than reading
+the store and journal whole — the trigger message gives this runbook's path,
+and the tool sits in the same directory:
+
+```
+python3 <runbook dir>/open-threads.py /path/.agent-threads/NAME-comments.json
+```
+
+It merges the pair per `../contract.md` and prints only the threads that need
+you, each with its anchor and full message history; `--all` prints one line
+per thread instead. The files stay the truth — the tool only reads them.
+
 ## Anchors on this surface
 
 Markdown anchors are prose anchors: `snippet` (exact text in the document),
@@ -109,11 +121,13 @@ resolve-after-visibility). Work thread by thread, appending as each one
 finishes — the viewer streams your replies in as they land. Hand back one
 brief terminal line, not a restatement (both rules in `../contract.md`).
 
-After your document writes land, sweep the store: any thread whose `snippet`
-no longer appears in the rendered document gets a re-anchor event pointing it
-at its passage's current text (snippets match rendered text, never markdown
-source). Orphaned resolved threads fall to an unlabeled pile at the article
-end, where the user will not find your replies.
+After your document writes land, sweep the store: run the tool with
+`--sweep /path/NAME.md`, and give each thread it prints a re-anchor event
+pointing it at its passage's current text (snippets match rendered text,
+never markdown source; the tool's check is an approximation of the rendering,
+so look at the passage before you repoint). Orphaned resolved threads fall to
+an unlabeled pile at the article end, where the user will not find your
+replies.
 
 Leave a thread `"open"` only when you are genuinely **blocked** — you cannot
 do what they asked without a decision or an answer from them — and say

@@ -16,6 +16,8 @@ Authoring conventions for this spec repo and its siblings.
   operational: no design rationale, no implementation status, no meta.
 - Maintainer material lives in `.maintainer/`. README (and LICENSE) are
   maintainer-facing repo framing.
+- Tests for the tools live in `.maintainer/tests/`; run them from the repo
+  root with `python3 -m unittest discover -s .maintainer/tests`.
 
 ## Doc naming
 
