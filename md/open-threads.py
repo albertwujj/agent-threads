@@ -106,10 +106,13 @@ def merge(store, events, journal_path):
         threads.append(thread)
         by_id[thread["id"]] = thread
 
+    # Events for threads the viewer has since discarded are normal on a
+    # long-lived store (the journal is append-only); count them, one line.
+    gone = {}
     for n, ev in events:
         thread = by_id.get(ev["thread"])
         if thread is None:
-            warn("%s:%d: event for unknown thread %s" % (journal_path, n, ev["thread"]))
+            gone[ev["thread"]] = gone.get(ev["thread"], 0) + 1
             continue
         if isinstance(ev.get("anchor"), dict):
             thread["anchor"].update(ev["anchor"])
@@ -123,6 +126,10 @@ def merge(store, events, journal_path):
                 "ts": ts_of(ev),
                 "turn": ev.get("turn"),
             })
+
+    if gone:
+        warn("%s: %d events for %d threads no longer in the store, skipped"
+             % (journal_path, sum(gone.values()), len(gone)))
 
     for thread in threads:
         msgs = thread["messages"]
