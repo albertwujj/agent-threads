@@ -9,7 +9,7 @@ Both run on one thread store, a JSON file the host keeps for each document or re
 
 ## Adding it
 
-With [agent-term](https://github.com/albertwujj/agent-term), the reference host, follow [its setup](https://github.com/albertwujj/agent-term/blob/main/docs/setup.md), then add this repo as a piece of [the suite](https://github.com/albertwujj/agent-term/blob/main/docs/suite.md); its docs show the loops in use ([plan with it](https://github.com/albertwujj/agent-term/blob/main/docs/plan.md), [the curated review](https://github.com/albertwujj/agent-term/blob/main/docs/review.md)).
+With [agent-term](https://github.com/albertwujj/agent-term), the reference host, follow [its setup](https://github.com/albertwujj/agent-term/blob/main/docs/setup.md), then add this repo as a piece of [the suite](https://github.com/albertwujj/agent-term/blob/main/docs/suite.md).
 
 ## Using it
 
