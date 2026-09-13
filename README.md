@@ -9,7 +9,7 @@ Both run on one thread store, a JSON file the host keeps for each document or re
 
 ## Adding it
 
-With [agent-term](https://github.com/albertwujj/agent-term), the reference host, follow [its setup](https://github.com/albertwujj/agent-term/blob/main/docs/setup.md); its docs show the loops in use ([plan with it](https://github.com/albertwujj/agent-term/blob/main/docs/plan.md), [the curated review](https://github.com/albertwujj/agent-term/blob/main/docs/review.md)). With another host that supports the protocol, clone this repo into `ai/` in your project, and leave `ai/` out of `.gitignore` so `@` pickers can see it. That is the default place; a clone beside the project, or under your home directory, works too ([placement](https://github.com/albertwujj/agent-term/blob/main/docs/conventions.md#placement)). One clone serves both loops.
+With [agent-term](https://github.com/albertwujj/agent-term), the reference host, follow [its setup](https://github.com/albertwujj/agent-term/blob/main/docs/setup.md); its docs show the loops in use ([plan with it](https://github.com/albertwujj/agent-term/blob/main/docs/plan.md), [the curated review](https://github.com/albertwujj/agent-term/blob/main/docs/review.md)).
 
 ## Using it
 
