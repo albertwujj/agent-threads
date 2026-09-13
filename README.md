@@ -2,8 +2,8 @@
 
 Two loops for working with a coding agent in writing. You comment on what it shows you, and it answers in place.
 
-- **Plans and documents.** A markdown document opens rendered in your terminal. You write on it, as comments or as edits to the text itself, and the agent edits the source and replies where you wrote.
-- **Curated reviews.** When the agent finishes a change, it writes a review of the parts that need your judgment, ordered and explained. You comment inline, on the code or on its reasoning, and it fixes and replies in the thread.
+- **[Plans and documents.](https://github.com/albertwujj/agent-term/blob/main/docs/plan.md)** A markdown document opens rendered in your terminal. You write on it, as comments or as edits to the text itself, and the agent edits the source and replies where you wrote.
+- **[Curated reviews.](https://github.com/albertwujj/agent-term/blob/main/docs/review.md)** When the agent finishes a change, it writes a review of the parts that need your judgment, ordered and explained. You comment inline, on the code or on its reasoning, and it fixes and replies in the thread.
 
 Both run on one thread store, a JSON file the host keeps for each document or review, so a host that renders one renders the other.
 
