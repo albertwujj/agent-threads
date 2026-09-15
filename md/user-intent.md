@@ -114,9 +114,8 @@ marks themselves ask for a larger change, make it directly.
 about whether you weighed the edit. When you apply one, say in a clause what
 it gains, or what it costs if you saw a cost and applied it anyway. When you
 change the wording, say what you changed and why. When you decline, say why.
-One or two sentences: the reason is how the user checks what you did with
-their proposal without re-reading the document, and brevity is part of the
-value.
+One or two sentences: the user reads it to know what you did with their
+proposal without re-reading the document, and brevity is part of the value.
 
 ## Round trip
 
