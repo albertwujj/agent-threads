@@ -110,6 +110,13 @@ resolve. A wider change buries the user's own edit inside yours, and they cannot
 evaluate what they cannot track. This is a soft rule: when the note or the
 marks themselves ask for a larger change, make it directly.
 
+**Every reply carries your judgment.** "Applied" alone tells the user nothing
+about whether you weighed the edit. When you apply one, say in a clause what
+it gains, or what it costs if you saw a cost and applied it anyway. When you
+change the wording, say what you changed and why. When you decline, say why.
+One or two sentences: the user reads the reason as the review, and brevity is
+part of the value.
+
 ## Round trip
 
 Per open thread: interpret and edit the document where warranted → keep
