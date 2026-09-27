@@ -103,7 +103,7 @@ and set `"status": "resolved"`.
 
 **Keep the edit's footprint small, and check one paragraph back and one
 forward.** The change lands in the sentence the user marked and in the
-sentences tied to it, up to one paragraph before and after: the
+sentences directly connected to it, up to one paragraph before and after: the
 ones that now repeat, contradict, or dangle off it, such as two paragraphs in a
 row opening with the same word. Anything wider you would change goes in the reply
 as numbered proposals, each with its intention, and the thread is left
