@@ -101,17 +101,11 @@ wording decided, so an awkward phrase is revised the same way, and the reply
 names what changed so the user can push back. Reply describing what you did
 and set `"status": "resolved"`.
 
-**Read one paragraph on either side before you write.** Check the edited
-sentence against the whole paragraph it sits in and against the paragraphs
-before and after it: it still picks up from what precedes and hands off to what
-follows, and no opening word, phrase, or claim now appears twice across them,
-such as two consecutive paragraphs opening with "Here", or an added phrase that
-names what the same sentence already named.
-
-**Keep the edit's footprint small.** The change lands in the sentence the user
-marked and in the sentences directly connected to it, including the last
-sentence of the paragraph before and the first of the paragraph after: the ones
-that now repeat, contradict, or dangle off it. Anything wider you would change goes in the reply
+**Keep the edit's footprint small, and check one paragraph back and one
+forward.** The change lands in the sentence the user marked and in the
+sentences directly connected to it, up to one paragraph before and after: the
+ones that now repeat, contradict, or dangle off it, such as two paragraphs in a
+row opening with the same word. Anything wider you would change goes in the reply
 as numbered proposals, each with its intention, and the thread is left
 `"open"` so the user sees them; when they answer, apply what they took and
 resolve. A wider change buries the user's own edit inside yours, and they cannot
