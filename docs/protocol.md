@@ -10,6 +10,6 @@ For another host, or for changes to this repo:
 - [Document feedback](../md/user-intent.md): comments and edits read as intent, followed by document updates and replies.
 - [Producing a review](../code/produce-review.md): preparing the package, opening it, and responding to feedback.
 - [Review authoring](../code/authoring.md): selecting and explaining what matters, and the package format.
-- [Splitting a discussion](../discussion/split.md): one document per topic.
+- [Continuing in a doc](../conversation/continue-in-doc.md): moving a discussion into a document, one per topic.
 
 For setup and everyday use, return to the [README](../README.md).

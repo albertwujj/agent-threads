@@ -18,7 +18,7 @@ One clone covers documents and reviews. Other locations work too ([placement](ht
 
 - **Documents.** Open a Markdown file in AgentTerm and comment or write directly on it.
 - **Reviews.** Name [`code/produce-review.md`](code/produce-review.md) in a prompt; `@produce-r` completes to it. The agent prepares a curated review, which AgentTerm opens.
-- **Separate topics.** Use [`@split`](discussion/split.md) to turn a discussion into one document per topic.
+- **Continue in a doc.** Use [`@continue-in-doc`](conversation/continue-in-doc.md) to move a discussion out of the terminal into a document you can comment on, one per topic.
 
 ## The protocol
 
