@@ -92,6 +92,11 @@ store), address them:
    - `lost` — the anchored code/quote is gone (you rewrote or removed it). Repoint the
      anchor (an `anchor` event updating `snippet`, and `line` for code) to where the
      concept now lives before you reply.
+
+   Maintain decision headings per `authoring.md`: change `[unconfirmed]` to
+   `[confirmed]` before `Decision:` when the user's answer settles the choice,
+   and update its explanation. Restore `[unconfirmed]` if a new decision is
+   needed. A confirmed choice and a resolved comment thread are separate states.
 4. **Resolve** — the review now shows your work, so the journal can say it is done:
    append a `"status": "resolved"` event per finished thread (with the reply, if you
    have not already streamed it in step 2). Leave a thread `"open"` only when you are

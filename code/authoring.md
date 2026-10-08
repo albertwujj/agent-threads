@@ -87,23 +87,41 @@ it prompts you with the path of `<package-stem>-errors.json`, the same list; fix
 the package and the open review re-renders. Changed lines you leave out are never
 flagged.
 
-## Mark what needs a decision — `CONFIRM:`
-The viewer builds its outline from your headings, so that outline is the only place
-a reviewer sees **where they must act** before opening anything. Put the ask in the
-heading text, not just in the prose underneath:
+## Decision headings
+The outline is the reviewer's map of decisions that need their input. Give each
+one a heading with a state followed by the words the reader will see:
 
-- Prefix a section whose content needs a decision with **`CONFIRM:`** —
-  `## CONFIRM: per-attempt charge at high retry counts`.
-- **Leave every other heading unmarked**, and say once near the top that unmarked
-  sections need no response. Absence of the marker is the signal; don't add a
-  second marker for "FYI".
-- **All caps on purpose.** It is a label, not prose — the same family as `TODO` /
-  `NOTE` — so it stays legible among ordinary headings and stays greppable
-  (`rg '^#+ CONFIRM:'` enumerates every open ask).
-- **One decision per `CONFIRM:` section.** If a section grew three asks, it is
-  three sections — otherwise a reviewer answers one and the others die quietly.
-- State the ask itself in the section: what you chose, what it costs, and what
+```markdown
+## [unconfirmed] Decision: link lifetime
+```
+
+Once the user's answer settles it:
+
+```markdown
+## [confirmed] Decision: link lifetime
+```
+
+- **Keep the heading words fixed.** The viewer turns only the bracketed state
+  into an amber circle or green check, in both the heading and outline. These
+  are status marks, not clickable approval controls.
+- **One decision per heading.** State what you chose, what it costs, and what
   you'd do instead. "Is this OK?" gives the reviewer nothing to push against.
+- **The user decides; you record it.** Their answer may be inline or in the
+  terminal, including choosing an alternative to your proposal. Change the state
+  to `[confirmed]` and update the explanation with the agreed choice. A question,
+  an ambiguous answer, or your own preference does not settle it.
+- Restore `[unconfirmed]` if the choice or a material assumption is reopened,
+  and explain what needs deciding again.
+- Leave ordinary headings unmarked, and say once near the top that only
+  unconfirmed decisions need a response. Keep confirmed decisions as a record.
+- Use the literal spelling above. `rg '^#+ \[unconfirmed\] Decision:'` lists
+  outstanding decisions. The state belongs before `Decision:`, matching the
+  order of the visible status mark and heading.
+
+A confirmed decision records the user's choice. A `resolved` comment thread
+records that you completed their ask, per `../contract.md`; neither state implies
+the other. When a decision requires code edits, make the agreed result visible in
+the committed review before resolving the thread.
 
 ## Ordering and grouping — your main levers
 A diff arrives in a fixed, mechanical shape: file by file, top to bottom.
@@ -169,7 +187,7 @@ The check slots into `handle()` between parse and auth; the existing order below
 The server check sits *before* auth (it **builds on** the limiter above) so
 unauthenticated floods are shed early.
 
-## CONFIRM: default refill rate
+## [unconfirmed] Decision: default refill rate
 **Builds on** the limiter: exposes its capacity and refill rate as settings.
 
 :::diff src/config.py L20-28
@@ -185,8 +203,8 @@ want; 10/s is the safer default and the one I'd keep.
 ## Quality bar — self-check before handing it over
 - [ ] Commit message improved — summary + key context live **there**.
 - [ ] **Highlights only** — trivial/mechanical changes (imports, renames, formatting) left out.
-- [ ] **Trade-offs and undiscussed decisions called out** — each its own **`CONFIRM:`** section, stating the choice, its cost, and the alternative.
-- [ ] A line near the top says unmarked sections need **no response**.
+- [ ] **Trade-offs and undiscussed decisions called out** — each its own **`[unconfirmed] Decision:`** section, stating the choice, its cost, and the alternative.
+- [ ] A line near the top says only unconfirmed decisions need a response; settled choices retain `[confirmed] Decision:` headings.
 - [ ] Sections grouped **by concept**; related cross-file blocks together.
 - [ ] Order goes **foundational → dependent**; each section says **how it relates**.
 - [ ] Prose adds **why/relationships** — no restated code, no repeated code comments.
