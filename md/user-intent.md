@@ -98,8 +98,8 @@ fragments, and adjust surrounding text for consistency. Keep the user's
 meaning and voice. This holds for an edit that arrives with no note as much
 as for one with a question attached: the absence of a note does not make the
 wording decided, so an awkward phrase is revised the same way, and the reply
-names what changed so the user can push back. Reply describing what you did
-and set `"status": "resolved"`.
+names what changes so the user can push back. Reply describing what you are
+changing, make the change, then set `"status": "resolved"`.
 
 **Keep the edit's footprint small, and check one paragraph back and one
 forward.** The change lands in the sentence the user marked and in the
@@ -121,14 +121,15 @@ shared understanding of why, and brevity is part of the value.
 
 ## Round trip
 
-Per open thread: interpret and edit the document where warranted → keep
-anchors current (`anchor` events) → append your reply and its
-`"status": "resolved"` to the journal — one event line can carry both. The
-order is a rule, not optional: the document write lands first, so `resolved`
-never claims a change the user cannot see yet (`../contract.md`,
-resolve-after-visibility). Work thread by thread, appending as each one
-finishes — the viewer streams your replies in as they land. Hand back one
-brief terminal line, not a restatement (both rules in `../contract.md`).
+Per open thread: interpret → append your reply, saying what you are changing
+and why → edit the document → keep anchors current (`anchor` events) →
+append its `"status"`. The order is a rule, not optional: the reply reaches
+the user ahead of the change it explains, and the status lands last, so
+`resolved` never claims a change the user cannot see yet (`../contract.md`).
+A thread with nothing to change takes its reply and status in one line. Work
+thread by thread, appending as each one finishes — the viewer streams your
+replies in as they land. Hand back one brief terminal line, not a restatement
+(both rules in `../contract.md`).
 
 After your document writes land, sweep the store: run the tool with
 `--sweep /path/NAME.md`, and give each thread it prints a re-anchor event

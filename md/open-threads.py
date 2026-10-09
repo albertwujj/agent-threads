@@ -4,10 +4,11 @@
     python3 open-threads.py <path/to/NAME-comments.json> [--sweep <path/to/NAME.md>] [--all]
 
 Reads the store and the journal beside it (NAME-agent.jsonl), merges them
-per ../contract.md, and prints the threads that are open with the user's
-message last, each with its anchor and its full message history.
+per ../contract.md, and prints the threads you have set no status on since
+the user's last message, each with its anchor and its full message history.
 
-  --all            one line per thread: id, status, whose message is last,
+  --all            one line per thread: id, the status you set on the user's
+                   last message (- for none), whose message is last,
                    heading, snippet
   --sweep NAME.md  after your edits: print the threads whose snippet no
                    longer appears in an approximation of the rendered text
@@ -82,7 +83,7 @@ def read_journal(path):
 def merge(store, events, journal_path):
     """A thread's truth is the store thread with its journal events applied
     in file order. Every thread is open until an event sets a status; a
-    user message newer than a `resolved` reopens it."""
+    user message newer than the status takes it back."""
     threads = []
     by_id = {}
     for t in store["threads"]:
@@ -134,13 +135,15 @@ def merge(store, events, journal_path):
     for thread in threads:
         msgs = thread["messages"]
         msgs.sort(key=lambda m: m["ts"])  # stable: store order, then journal order, on ties
-        status = thread["journal_status"] or "open"
-        if status == "resolved" and any(
+        status = thread["journal_status"]
+        if status and any(
                 m["author"] == "user" and m["ts"] > thread["status_ts"] for m in msgs):
-            status = "open"
+            status = None
         thread["status"] = status
         thread["last"] = msgs[-1]["author"] if msgs else "none"
-        thread["needs"] = status == "open" and thread["last"] == "user"
+        # Yours until you set a status on the user's last message: a reply
+        # alone, ahead of its edit, leaves it with you.
+        thread["needs"] = status is None and any(m["author"] == "user" for m in msgs)
     return threads
 
 
@@ -186,7 +189,7 @@ def print_all(threads):
         if len(snippet) > ALL_SNIPPET:
             snippet = snippet[:ALL_SNIPPET - 1] + "…"
         print("%s  %s  last=%s  %s | %s" % (
-            t["id"], t["status"], t["last"], a.get("heading") or "", snippet))
+            t["id"], t["status"] or "-", t["last"], a.get("heading") or "", snippet))
 
 
 # --- sweep --------------------------------------------------------------
@@ -263,7 +266,7 @@ def sweep(threads, doc_path):
         if snippet and snippet in rendered:
             continue
         orphaned += 1
-        print("%s  %s  %s" % (t["id"], t["status"], snippet))
+        print("%s  %s  %s" % (t["id"], t["status"] or "-", snippet))
     print("sweep: %d of %d anchors orphaned" % (orphaned, checked))
 
 

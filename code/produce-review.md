@@ -98,8 +98,8 @@ store), address them:
    and update its explanation. Restore `[unconfirmed]` if a new decision is
    needed. A confirmed choice and a resolved comment thread are separate states.
 4. **Resolve** — the review now shows your work, so the journal can say it is done:
-   append a `"status": "resolved"` event per finished thread (with the reply, if you
-   have not already streamed it in step 2). Leave a thread `"open"` only when you are
+   append a `"status": "resolved"` event per finished thread (its reply went in at step
+   2, ahead of the commit). Leave a thread `"open"` only when you are
    genuinely **blocked** — you cannot do what they asked without an answer from them —
    and say exactly what you need. Doing their ask beats asking about it.
 5. **Hand back** briefly, per `../contract.md` — a count or one line; never restate the

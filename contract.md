@@ -20,11 +20,10 @@ reader, the viewer included, merges the two at read time, so an append is all
 it takes for your reply to surface. Always read both files: your own
 resolutions live only in the journal.
 
-**What needs you:** every thread that is `open` after the merge whose last
-message is the user's. The last-message test settles both edge cases: a
-thread where you replied and set `open` (blocked) has your word last, so it
-waits on the user, not you; a `resolved` thread with a newer user message
-under it is reopened and needs you again.
+**What needs you:** every thread you have set no status on since the user's
+last message. A thread you set `open` (blocked) waits on the user, not you; a
+user message newer than your status, `resolved` or `open`, reopens the thread
+and it needs you again; a reply with no status after it still needs you.
 
 ## Store schema (you read, never write)
 
@@ -52,7 +51,7 @@ as a label — read it as a comment on that image, and update `src` if you move
 or replace it. `title` and the `turn` fields are optional. There is no
 `status` field in the store: a thread's status lives entirely in your
 journal — every thread is open until a journal event says otherwise, and a
-user follow-up newer than your `resolved` reopens it.
+user follow-up newer than your status reopens it.
 
 ## Journal events
 
@@ -81,8 +80,14 @@ is one line.
   thread stays placed. Check every thread in the store, not only the one you
   are working: chained edits on one passage orphan every earlier thread
   anchored to it.
+- Per thread, in this order: your reply (what you are changing and why),
+  then the change (the document write; on review, the commit) and its
+  `anchor` events, then the `status`, the last thing you write for it. The
+  user reads why before the change lands, and the status says it is done. A
+  thread with nothing to change takes its reply and status in one line.
 - When every open thread has its disposition, the turn is over: no further
-  journal writes until the user's next send.
+  writes to the document, the code under review, or the journal until the
+  user's next send.
 
 ## Status lifecycle
 
@@ -147,6 +152,10 @@ On **review**, a `resolved` thread collapses to a one-line disclosure the user
 can click open; `open` threads never fold. Same rule as markdown, different
 shape: what you finished gets out of the way, what you are blocked on stays in
 front of them.
+
+On both surfaces the viewer waits while any thread the user sent lacks a
+disposition, and comes up in front of the user when the last one lands: that
+is the moment they read your work.
 
 If you go quiet with sent threads still lacking a disposition, the host
 re-pings you once with a reminder naming the store — treat it exactly like
