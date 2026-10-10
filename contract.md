@@ -161,6 +161,12 @@ If you go quiet with sent threads still lacking a disposition, the host
 re-pings you once with a reminder naming the store — treat it exactly like
 the original send.
 
+## Thread or terminal
+
+Say what concerns a passage in that passage's thread. Use the terminal for
+what no single passage owns, such as a question about style across the whole
+document.
+
 ## Handing back
 
 After working the threads, tell the user in the terminal only that you did,
