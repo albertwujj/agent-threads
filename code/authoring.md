@@ -102,12 +102,14 @@ Once the user's answer settles it:
 ```
 
 - **Keep the heading words fixed.** The viewer turns only the bracketed state
-  into an amber circle or green check, in both the heading and outline. These
-  are status marks, not clickable approval controls.
+  into an amber circle or green check, in both the heading and outline. The
+  user confirms by ticking the circle, which reaches you as a `[Confirm]`
+  thread message naming the decision in those words.
 - **One decision per heading.** State what you chose, what it costs, and what
   you'd do instead. "Is this OK?" gives the reviewer nothing to push against.
-- **The user decides; you record it.** Their answer may be inline or in the
-  terminal, including choosing an alternative to your proposal. Change the state
+- **The user decides; you record it.** Their answer may be a `[Confirm]`, which
+  keeps your choice as written, or words inline or in the terminal, including
+  choosing an alternative to your proposal. Change the state
   to `[confirmed]` and update the explanation with the agreed choice. A question,
   an ambiguous answer, or your own preference does not settle it.
 - Restore `[unconfirmed]` if the choice or a material assumption is reopened,

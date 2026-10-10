@@ -97,6 +97,11 @@ store), address them:
    `[confirmed]` before `Decision:` when the user's answer settles the choice,
    and update its explanation. Restore `[unconfirmed]` if a new decision is
    needed. A confirmed choice and a resolved comment thread are separate states.
+   A thread message `[Confirm] Decision: <heading words>` is the user keeping
+   that choice as written: write `[confirmed]` and turn the explanation into
+   the record of the choice. When the confirm is the user's only new word on
+   the thread, it takes no reply; resolve it in step 4, since the heading is
+   the answer.
 4. **Resolve** — the review now shows your work, so the journal can say it is done:
    append a `"status": "resolved"` event per finished thread (its reply went in at step
    2, ahead of the commit). Leave a thread `"open"` only when you are
