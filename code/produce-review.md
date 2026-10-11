@@ -57,7 +57,11 @@ Create the folder; the store is the `-comments.json` sibling.
 
 The user reads the review and leaves inline comments — on **your explanations** and on the **code**.
 When they say they've commented (or click **Send to agent**, which drops a one-line pointer to the
-store), address them:
+store), address them in the existing threads.
+
+A later terminal correction to a sent comment or edit continues the same
+thread, even without a new store pointer. Follow `../contract.md` (Terminal
+corrections).
 
 1. **Read the store** (the package's `-comments.json` sibling — read-only for
    you; everything you say or set is appended to the `-agent.jsonl` journal
@@ -73,7 +77,8 @@ store), address them:
                "context": "" }               // commit/preview omits them (path
                                              // is then "(note N)" etc.)
    ```
-2. **Work each non-resolved thread** per `../contract.md`:
+2. **Work each thread needing you**, including one continued by a terminal
+   correction, per `../contract.md`:
    **before editing any code**, resolve the nearest `coding-guide.md` or similar (this file's
    directory, then each parent up the direct chain only — closest wins,
    siblings/children never searched) if one exists, and hold any shared-checkout

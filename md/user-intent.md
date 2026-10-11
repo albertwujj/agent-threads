@@ -13,6 +13,10 @@ The two files, the journal event rules, and the status lifecycle are the
 shared contract in **`../contract.md`** — read it first. This runbook is
 what's specific to the markdown surface.
 
+A later terminal correction to a sent comment or edit continues the same
+thread, even without a new host pointer. Follow `../contract.md` (Terminal
+corrections).
+
 ## Where things live
 
 For a document at `/path/NAME.md`, the pair sits in a folder beside it:
@@ -121,7 +125,8 @@ shared understanding of why, and brevity is part of the value.
 
 ## Round trip
 
-Per open thread: interpret → append your reply, saying what you are changing
+Per thread needing work, including one continued by a terminal correction:
+interpret → append your reply, saying what you are changing
 and why → edit the document → keep anchors current (`anchor` events) →
 append its `"status"`. The order is a rule, not optional: the reply reaches
 the user ahead of the change it explains, and the status lands last, so

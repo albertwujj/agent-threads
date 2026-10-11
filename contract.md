@@ -87,7 +87,7 @@ is one line.
   thread with nothing to change takes its reply and status in one line.
 - When every open thread has its disposition, the turn is over: no further
   writes to the document, the code under review, or the journal until the
-  user's next send.
+  user's next send or terminal follow-up about that work.
 
 ## Status lifecycle
 
@@ -166,6 +166,36 @@ the original send.
 Say what concerns a passage in that passage's thread. Use the terminal for
 what no single passage owns, such as a question about style across the whole
 document.
+
+## Terminal corrections
+
+When the user corrects a sent comment or edit in the terminal, including
+after interrupting you, continue in its existing thread. Re-read the store
+and journal, including resolved threads, and match the correction by an
+explicit thread id or by its passage, file, quoted request, and conversation
+context. If more than one thread fits, ask which one in the terminal before
+appending or changing anything; recency alone does not identify the thread.
+Feedback no single passage owns stays in the terminal.
+
+Before continuing the work, append your reply on the matched thread. Capture
+the relevant correction; you may rephrase or summarize it for clarity and
+brevity while preserving its meaning and constraints. Say it came from the
+terminal, and explain what you will change and why. For example: `Your
+terminal correction is to keep the timeout and only rename the option. I’ll
+preserve the behavior and update the name.` If the correction covers several
+clearly identified threads, record the relevant part on each.
+
+Follow the correction wherever it supersedes the earlier request. Preserve
+the original user message: record the correction as your acknowledgement
+in the journal's `body`, never as an invented user message or a store edit.
+Stamp the current store `turn` and a real `ts`; terminal input does not tick
+the store's clock. Treat the correction as new work even if the merged
+thread still says `resolved`; terminal input does not automatically reopen it.
+
+Then follow the usual reply → change → anchor → status order. Set the final
+status only after the corrected work is visible. If the user withdrew the
+request, record that and resolve once any requested cleanup is complete;
+leave `open` only for a real blocker, naming what you need.
 
 ## Handing back
 
