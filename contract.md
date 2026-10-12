@@ -4,87 +4,69 @@ One thread model carries the human↔agent conversation on two surfaces: a
 **review package** (see `code/produce-review.md`) and a **live markdown
 document** (see `md/user-intent.md`). Each conversation is a pair of files;
 where they live is surface-specific and defined in each runbook. This doc is
-the shared contract: the files, the schema, the event rules, and the status
-lifecycle.
+the shared contract: the files, how you write to them, and the status
+lifecycle. If a helper here fails, see `troubleshooting.md`.
 
 ## Two files, one writer each
 
 - `<stem>-comments.json` — the **store**: threads, the user's messages,
   anchors. The viewer writes it; you only read it.
 - `<stem>-agent.jsonl` — your **journal**, beside the store: everything you
-  say or set, appended one JSON object per line. You are its only writer. It
-  may not exist yet; your first append creates it.
+  say or set. You are its only writer, through `journal.py` (below). It may
+  not exist yet; your first write creates it.
 
-A thread's truth is the store with the journal applied in file order. Every
-reader, the viewer included, merges the two at read time, so an append is all
-it takes for your reply to surface. Always read both files: your own
-resolutions live only in the journal.
+A thread's truth is the store with the journal applied in order. Every
+reader, the viewer included, merges the two at read time, so a write is all
+it takes for your reply to surface. Your own statuses live only in the
+journal; each surface's tool reads the two together.
 
 **What needs you:** every thread you have set no status on since the user's
 last message. A thread you set `open` (blocked) waits on the user, not you; a
 user message newer than your status, `resolved` or `open`, reopens the thread
 and it needs you again; a reply with no status after it still needs you.
 
-## Store schema (you read, never write)
+## Anchors
 
-```jsonc
-{ "version": 1,
-  "turn": 4,                     // logical clock: count of user send-batches;
-                                 // the viewer ticks it, you stamp it on events
-  "threads": [
-  { "id": "t…",
-    "title": "",                 // short intent summary; you set it (see Titles)
-    "anchor": {
-      "snippet": "if tokens <= 0:",  // the real anchor: exact text on the surface
-      "context": ""                  // only when snippet is short/repeated: the
-    },                               // enclosing line or paragraph it sits in
-    "anchor_status": "ok",       // ok | moved | lost — review stamps it;
-                                 // markdown doesn't (it anchors by snippet live)
-    "messages": [ { "author": "user", "body": "…", "ts": 1719500000000, "turn": 4 } ]
-  } ] }
+An anchor places a thread on the surface:
+
+- `snippet` — the exact text the thread is about, as the user sees it.
+- `context` — only when the snippet is short or repeated: the line or
+  paragraph it sits in.
+- Review code adds `path`, `side` and `line`. Markdown adds `heading`, the
+  nearest heading above; a markdown comment on an **image** adds `src`, the
+  image's authored path, with `snippet` holding its alt text as a label. Read
+  it as a comment on that image, and update `src` if you move or replace it.
+
+## Writing the journal
+
+Write through `journal.py`, beside this file. It stamps each event with the
+time and the store's current turn:
+
+```
+python3 journal.py STORE reply   THREAD TEXT      # your words, ahead of the change
+python3 journal.py STORE resolve THREAD [TEXT]    # done, with your words if given
+python3 journal.py STORE block   THREAD TEXT      # blocked: what you need, and open
+python3 journal.py STORE anchor  THREAD... --snippet TEXT [--context ...] [--heading ...]
+                                 [--src ...] [--path ...] [--side old|new] [--line N]
+python3 journal.py STORE title   THREAD TEXT      # review only
 ```
 
-Surfaces extend the anchor: review code anchors add `path`/`side`/`line`;
-markdown anchors add `heading`, and a markdown comment on an **image** adds
-`src` (the image's authored path) with `snippet` holding the image's alt text
-as a label — read it as a comment on that image, and update `src` if you move
-or replace it. `title` and the `turn` fields are optional. There is no
-`status` field in the store: a thread's status lives entirely in your
-journal — every thread is open until a journal event says otherwise, and a
-user follow-up newer than your status reopens it.
+`STORE` is the `-comments.json` path. A `TEXT` of `-` is read from stdin;
+use it for anything with quotes or several lines.
 
-## Journal events
-
-One line per action, appended to `<stem>-agent.jsonl`:
-
-```jsonc
-{ "thread": "t…",               // required: the store thread id
-  "body": "…",                  // a reply on that thread
-  "status": "resolved",         // or "open" — see Status lifecycle
-  "title": "…",                 // set/replace the thread's title (review)
-  "anchor": { "snippet": "…" }, // fields merged into the thread's anchor
-  "ts": 1719500000000,          // real epoch ms (`date +%s%3N`), never invented
-  "turn": 4 }                   // the store's current `turn`, read at write time
-```
-
-One event may carry several fields — a reply plus its `"status":"resolved"`
-is one line.
-
-- **Append per thread, as you finish it** — never one batch at the end. Each
-  append streams into the open viewer while you work.
-- Append only. Correct yourself with a further event (later lines win);
-  never rewrite the journal, and never write the store file at all.
-- Stamp `ts` and `turn` on every event.
-- Keep anchors current: when your own edit changes the anchored text, append
-  an `anchor` event updating `snippet` (and surface-specific fields) so the
-  thread stays placed. Check every thread in the store, not only the one you
-  are working: chained edits on one passage orphan every earlier thread
-  anchored to it.
+- **Write per thread, as you finish it** — never one batch at the end. Each
+  write streams into the open viewer while you work.
+- The journal only grows. Correct yourself with a further call (later
+  events win); never edit the journal, and never write the store.
+- Keep anchors current: when your own edit changes the anchored text,
+  repoint the thread with `anchor` so it stays placed. Check every thread in
+  the store, not only the one you are working: chained edits on one passage
+  orphan every earlier thread anchored to it.
 - Per thread, in this order: your reply (what you are changing and why),
-  then the change (the document write; on review, the commit) and its
-  `anchor` events, then the `status`, the last thing you write for it. The
-  user reads why before the change lands, and the status says it is done. A
-  thread with nothing to change takes its reply and status in one line.
+  then the change and its anchor updates, then the status, the last thing you
+  write for it. The user reads why with the change, and the status says it is
+  done. A thread with nothing to change takes its words and status in one
+  call.
 - When every open thread has its disposition, the turn is over: no further
   writes to the document, the code under review, or the journal until the
   user's next send or terminal follow-up about that work.
@@ -93,12 +75,12 @@ is one line.
 
 Shared on both surfaces: a user follow-up reopens a thread to `open` — the
 follow-up IS the reopen, there is no separate action. The store-level `turn`
-is the viewer's alone; read it and stamp it on your events, never change it.
+is the viewer's alone; never change it.
 
 ### Blocked, or done
 
-Every thread you work ends in exactly one of two states, and you set it (a
-`status` event) — the same on both surfaces:
+Every thread you work ends in exactly one of two states, and you set it
+(`resolve` or `block`) — the same on both surfaces:
 
 - `resolved` — you completed the user's ask. Nothing is needed from them.
 - `open` — you are **blocked**: you cannot finish without the user. Your reply
@@ -128,8 +110,8 @@ The fold is the user's receipt that the final state is on screen.
 
 ## Titles (review only)
 
-When a thread's `title` is empty, set it while working the thread: a `title`
-event with a short intent summary (a few words, e.g. "Tighten polling
+When a thread's `title` is empty, set it while working the thread with
+`title` and a short intent summary (a few words, e.g. "Tighten polling
 wording"). Threads born from user edits especially need one — their first
 message is a diff, which makes a poor label. The review viewer shows the
 title on the collapsed thread line.
@@ -174,10 +156,10 @@ after interrupting you, continue in its existing thread. Re-read the store
 and journal, including resolved threads, and match the correction by an
 explicit thread id or by its passage, file, quoted request, and conversation
 context. If more than one thread fits, ask which one in the terminal before
-appending or changing anything; recency alone does not identify the thread.
+writing or changing anything; recency alone does not identify the thread.
 Feedback no single passage owns stays in the terminal.
 
-Before continuing the work, append your reply on the matched thread. Capture
+Before continuing the work, reply on the matched thread. Capture
 the relevant correction; you may rephrase or summarize it for clarity and
 brevity while preserving its meaning and constraints. Say it came from the
 terminal, and explain what you will change and why. For example: `Your
@@ -186,11 +168,10 @@ preserve the behavior and update the name.` If the correction covers several
 clearly identified threads, record the relevant part on each.
 
 Follow the correction wherever it supersedes the earlier request. Preserve
-the original user message: record the correction as your acknowledgement
-in the journal's `body`, never as an invented user message or a store edit.
-Stamp the current store `turn` and a real `ts`; terminal input does not tick
-the store's clock. Treat the correction as new work even if the merged
-thread still says `resolved`; terminal input does not automatically reopen it.
+the original user message: record the correction as your `reply`, never as
+an invented user message or a store edit. Treat the correction as new work
+even if the merged thread still says `resolved`; terminal input does not
+automatically reopen it.
 
 Then follow the usual reply → change → anchor → status order. Set the final
 status only after the corrected work is visible. If the user withdrew the

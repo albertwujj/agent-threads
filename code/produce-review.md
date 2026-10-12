@@ -16,7 +16,7 @@ shared across worktrees, safe from `git clean`):
 ```
 <git-common-dir>/review/<branch>/<branch>.md             # your package — you write it (see authoring.md)
 <git-common-dir>/review/<branch>/<branch>-comments.json  # the comment store — the viewer writes it, you read it
-<git-common-dir>/review/<branch>/<branch>-agent.jsonl    # your journal — you append replies/status here
+<git-common-dir>/review/<branch>/<branch>-agent.jsonl    # your journal — ../journal.py writes it
 ```
 
 Fill in the path above:
@@ -64,39 +64,33 @@ thread, even without a new store pointer. Follow `../contract.md` (Terminal
 corrections).
 
 1. **Read the store** (the package's `-comments.json` sibling — read-only for
-   you; everything you say or set is appended to the `-agent.jsonl` journal
-   beside it, one JSON event per line). The files, event rules, and status
-   lifecycle are the shared contract in **`../contract.md`** — the same model
-   carries markdown-document threads (`../md/user-intent.md`). Review anchors
-   extend the shared anchor:
-   ```jsonc
-   "anchor": { "path": "src/x.py", "snippet": "if tokens <= 0:",
-               "side": "new", "line": "42",  // side/line on code lines — a diff
-                                             // cell or a :::code slice (always
-                                             // side new); a quote on prose/
-               "context": "" }               // commit/preview omits them (path
-                                             // is then "(note N)" etc.)
-   ```
+   you; everything you say or set goes to the `-agent.jsonl` journal beside
+   it, written with `../journal.py`). The files, how you write to them, and
+   the status lifecycle are the shared contract in **`../contract.md`** — the
+   same model carries markdown-document threads (`../md/user-intent.md`).
+   Review anchors add `path`, `side` and `line` (`--path`, `--side`, `--line`
+   on `anchor`): side and line on code lines, a diff cell or a `:::code` slice
+   (always side `new`); a quote on prose, the commit or the preview has none,
+   and its path is then `(note N)` and the like.
 2. **Work each thread needing you**, including one continued by a terminal
    correction, per `../contract.md`:
    **before editing any code**, resolve the nearest `coding-guide.md` or similar (this file's
    directory, then each parent up the direct chain only — closest wins,
    siblings/children never searched) if one exists, and hold any shared-checkout
    lock your workflow requires; edit code where warranted, keeping `snippet` (and
-   `line`) current via `anchor` events when your change touches an anchored line.
-   **Append your reply as you finish each thread** — it streams into the open
-   review while you work. Hold only `status` for step 4 — the review renders
-   committed work, so a `resolved` written now claims a change the user cannot
-   see yet.
+   `line`) current with `anchor` when your change touches an anchored line.
+   **Write your `reply` as you finish each thread** — it streams into the open
+   review while you work. Hold only the status for step 4 — the review renders
+   committed work, so a `resolve` now claims a change the user cannot see yet.
 3. **Commit your code edits** — the diff is pulled from the committed range, so uncommitted
    tracked changes flag the review out of date (red banner) instead of showing your update. If the
    package's `range:` pins the tip by SHA, advance it. **Re-render** happens when you **edit the
    package** (the open review auto-refreshes), when it's re-opened (the `review://` link), or on
    refocus — it re-anchors every comment against the new diff and stamps `anchor_status`:
    - `ok` / `moved` — handled for you (code line auto-updated; a quote still on the page stays put).
-   - `lost` — the anchored code/quote is gone (you rewrote or removed it). Repoint the
-     anchor (an `anchor` event updating `snippet`, and `line` for code) to where the
-     concept now lives before you reply.
+   - `lost` — the anchored code/quote is gone (you rewrote or removed it). Repoint it
+     with `anchor` (`--snippet`, and `--line` for code) to where the concept now lives
+     before you resolve.
 
    Maintain decision headings per `authoring.md`: change `[unconfirmed]` to
    `[confirmed]` before `Decision:` when the user's answer settles the choice,
@@ -108,10 +102,10 @@ corrections).
    the thread, it takes no reply; resolve it in step 4, since the heading is
    the answer.
 4. **Resolve** — the review now shows your work, so the journal can say it is done:
-   append a `"status": "resolved"` event per finished thread (its reply went in at step
-   2, ahead of the commit). Leave a thread `"open"` only when you are
-   genuinely **blocked** — you cannot do what they asked without an answer from them —
-   and say exactly what you need. Doing their ask beats asking about it.
+   `resolve` each finished thread (its reply went in at step 2, ahead of the commit).
+   `block` a thread only when you are genuinely **blocked** — you cannot do what they
+   asked without an answer from them — and say exactly what you need. Doing their ask
+   beats asking about it.
 5. **Hand back** briefly, per `../contract.md` — a count or one line; never restate the
    per-thread replies in the terminal.
 
@@ -134,4 +128,4 @@ by **amending the commit message** (`git commit --amend` on the range tip):
   nearest `commit-message.md` or similar, if the project has one.
 - Amending moves the tip SHA: update the package's `range:` if it pins the tip
   by SHA, then let the re-render re-anchor (the old quote goes `lost` — reply
-  and set `"status": "resolved"` as usual).
+  and resolve as usual).

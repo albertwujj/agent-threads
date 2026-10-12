@@ -7,6 +7,7 @@ Documents and reviews share a thread format. Each has a JSON store written by th
 For another host, or for changes to this repo:
 
 - [Shared contract](../contract.md): files, messages, and thread status.
+- [Store and journal format](../format.md): both files line by line, and how they merge.
 - [Document feedback](../md/user-intent.md): comments and edits read as intent, followed by document updates and replies.
 - [Producing a review](../code/produce-review.md): preparing the package, opening it, and responding to feedback.
 - [Review authoring](../code/authoring.md): selecting and explaining what matters, and the package format.

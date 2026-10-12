@@ -9,7 +9,7 @@ user is reading — and editing — the document live while you work; their
 comments and edits arrive as threads. Being pointed this way means the host
 supports the protocol; just work the threads.
 
-The two files, the journal event rules, and the status lifecycle are the
+The two files, how you write to them, and the status lifecycle are the
 shared contract in **`../contract.md`** — read it first. This runbook is
 what's specific to the markdown surface.
 
@@ -23,7 +23,7 @@ For a document at `/path/NAME.md`, the pair sits in a folder beside it:
 
 ```
 /path/.agent-threads/NAME-comments.json   # the store — the viewer writes it, you read it
-/path/.agent-threads/NAME-agent.jsonl     # your journal — you append replies/status here
+/path/.agent-threads/NAME-agent.jsonl     # your journal — ../journal.py writes it
 ```
 
 `NAME` is the document's basename verbatim (no case or character transformation);
@@ -37,7 +37,7 @@ global gitignore covers the surface everywhere. Read the path from the trigger
 message rather than deriving it.
 
 The viewer creates the store; a missing store means no threads yet — never
-create it yourself. The journal is yours: your first append creates it.
+create it yourself. The journal is yours: your first write creates it.
 
 To see what needs you, run the tool beside this runbook rather than reading
 the store and journal whole — the trigger message gives this runbook's path,
@@ -103,7 +103,7 @@ meaning and voice. This holds for an edit that arrives with no note as much
 as for one with a question attached: the absence of a note does not make the
 wording decided, so an awkward phrase is revised the same way, and the reply
 names what changes so the user can push back. Reply describing what you are
-changing, make the change, then set `"status": "resolved"`.
+changing, make the change, then resolve.
 
 **Keep the edit's footprint small, and check one paragraph back and one
 forward.** The change lands in the sentence the user marked and in the
@@ -125,26 +125,32 @@ shared understanding of why, and brevity is part of the value.
 
 ## Round trip
 
-Per thread needing work, including one continued by a terminal correction:
-interpret → append your reply, saying what you are changing
-and why → edit the document → keep anchors current (`anchor` events) →
-append its `"status"`. The order is a rule, not optional: the reply reaches
-the user ahead of the change it explains, and the status lands last, so
-`resolved` never claims a change the user cannot see yet (`../contract.md`).
-A thread with nothing to change takes its reply and status in one line. Work
-thread by thread, appending as each one finishes — the viewer streams your
-replies in as they land. Hand back one brief terminal line, not a restatement
-(both rules in `../contract.md`).
+Write the journal with `journal.py` (`../contract.md`, Writing the journal),
+one directory up from this runbook:
 
-After your document writes land, sweep the store: run the tool with
-`--sweep /path/NAME.md`, and give each thread it prints a re-anchor event
-pointing it at its passage's current text (snippets match rendered text,
-never markdown source; the tool's check is an approximation of the rendering,
-so look at the passage before you repoint). Orphaned resolved threads fall to
-an unlabeled pile at the article end, where the user will not find your
-replies.
+```
+python3 <runbook dir>/../journal.py /path/.agent-threads/NAME-comments.json reply THREAD -
+```
 
-Leave a thread `"open"` only when you are genuinely **blocked** — you cannot
+Work thread by thread. For each thread needing work, including one continued
+by a terminal correction, do these in one step, back to back: `reply`, saying
+what you are changing and why; the edit to the document; `anchor` when the
+edit changed the thread's anchored text; then `resolve`, or `block` when you
+need the user. The user sees your words and the change together, and the
+status lands last, so `resolved` never claims a change the user cannot see
+yet. A thread with nothing to change takes one `resolve THREAD TEXT` or
+`block`.
+
+Hold the status of the round's last thread until after the sweep: once the
+edits are done, run the tool with `--sweep /path/NAME.md`, repoint each
+thread it prints with `anchor` at its passage's current text (snippets match
+rendered text, never markdown source; the tool's check is an approximation
+of the rendering, so look at the passage before you repoint), then set that
+last status. Orphaned resolved threads fall to an unlabeled pile at the
+article end, where the user will not find your replies. Hand back one brief
+terminal line, not a restatement (`../contract.md`).
+
+`block` a thread only when you are genuinely **blocked** — you cannot
 do what they asked without a decision or an answer from them — and say
 exactly what you need in your reply. Everything you resolved folds into a
 single line under its block, so an open thread is the one thing the user must

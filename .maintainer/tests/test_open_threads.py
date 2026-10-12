@@ -112,7 +112,8 @@ class OpenThreadsTest(unittest.TestCase):
         r = self.pair.run()
         self.assertIn("1 threads, 1 need you", r.stdout)
         self.assertIn("[user turn 1] do it\n[agent] Done.\n[user turn 2] not quite\n", r.stdout)
-        self.assertIn("t1  open  last=user", self.pair.run("--all").stdout)
+        # The follow-up takes the status back: none stands.
+        self.assertIn("t1  -  last=user", self.pair.run("--all").stdout)
 
     def test_status_only_resolve_after_user_message_stays_resolved(self):
         self.pair.write_store([thread("t1", "s", [user("do it", 100, 1)])])
@@ -190,7 +191,7 @@ class OpenThreadsTest(unittest.TestCase):
     def test_sweep_uses_journal_anchor(self):
         self.pair.write_store([thread("t1", "old wording", [user("a", 1, 1)])])
         self.pair.write_doc("Some new wording here.\n")
-        self.assertIn("t1  open  old wording\nsweep: 1 of 1", self.pair.run("--sweep", self.pair.doc).stdout)
+        self.assertIn("t1  -  old wording\nsweep: 1 of 1", self.pair.run("--sweep", self.pair.doc).stdout)
         self.pair.write_journal([{"thread": "t1", "anchor": {"snippet": "new wording"}, "ts": 5, "turn": 1}])
         self.assertEqual(self.pair.run("--sweep", self.pair.doc).stdout, "sweep: 0 of 1 anchors orphaned\n")
         self.assertIn("anchor: new wording", self.pair.run().stdout)
