@@ -20,10 +20,12 @@ the important parts stand out — **don't aim for completeness.**
 - **Skip the trivial.** Pure import add/remove, renames, formatting, boilerplate,
   generated files, mechanical refactors — don't embed or explain them. They cost the
   reviewer time and bury the signal.
-- **Don't list moved/re-indented lines.** When a block only moves or re-indents (e.g.
-  wrapping a body in a `with`/`try`), a line diff shows the whole block as remove+add
-  even though nothing changed. Narrow the `:::diff` `L<start>-<end>` to the
-  genuinely-new lines only, and say in one line that the rest is unchanged (moved).
+- **Leave out moved code.** Code that only moved, or changed indentation without
+  changing what it does (e.g. a body wrapped in a `with`/`try`), shows in the
+  standard diff as all its lines removed and added again. Here, narrow the
+  `:::diff` `L<start>-<end>` to the genuinely-new lines and say what moved where.
+  If the move changes logic (e.g. execution order), it needs review: show it with
+  `:::code` and explain it in the paragraph beside the code.
 - **Lead with what needs judgment.** New behavior, non-obvious logic, anything risky or
   subtle — that *is* the review.
 - **Surface trade-offs and seek confirmation — especially ones you haven't already
@@ -75,17 +77,11 @@ range: origin/main..add-rate-limiter   # branch (or SHA) tip — pinned, not HEA
   a callee the new code calls, the existing shape a new block follows. Slice it as
   tight as a diff block; a range is required. The paragraph right before the
   directive renders beside the code, so put the why there. If the slice touches
-  changed lines the viewer marks them; show changed code with `:::diff`.
+  changed lines the viewer marks them; split it, with the changed lines in a
+  `:::diff` and the unchanged ones left in `:::code`. Lines that only moved are
+  not changes: the viewer marks them as moved and names where they came from.
 - **Range form is exact**: `L<start>-<end>`, both ends, dash between. A single
   line is `L42-42`.
-
-A directive that fails to parse (`L42`, `L42:50`, `42-50`), a `:::code` with no
-range or past the end of the file, or a `:::diff` range with no changes renders
-as a problem card where the block would be, and the review shows an amber
-**directive errors** banner listing them with a **Notify agent** button. Clicking
-it prompts you with the path of `<package-stem>-errors.json`, the same list; fix
-the package and the open review re-renders. Changed lines you leave out are never
-flagged.
 
 ## Decision headings
 The outline is the reviewer's map of decisions that need their input. Give each
