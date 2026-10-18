@@ -102,7 +102,8 @@ corrections).
    the thread, it takes no reply; resolve it in step 4, since the heading is
    the answer.
 4. **Resolve** — the review now shows your work, so the journal can say it is done:
-   `resolve` each finished thread (its reply went in at step 2, ahead of the commit).
+   `resolve THREAD` each finished thread with no text (its reply went in at step 2,
+   ahead of the commit).
    `block` a thread only when you are genuinely **blocked** — you cannot do what they
    asked without an answer from them — and say exactly what you need. Doing their ask
    beats asking about it.

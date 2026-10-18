@@ -135,11 +135,11 @@ python3 <runbook dir>/../journal.py /path/.agent-threads/NAME-comments.json repl
 Work thread by thread. For each thread needing work, including one continued
 by a terminal correction, do these in one step, back to back: `reply`, saying
 what you are changing and why; the edit to the document; `anchor` when the
-edit changed the thread's anchored text; then `resolve`, or `block` when you
-need the user. The user sees your words and the change together, and the
-status lands last, so `resolved` never claims a change the user cannot see
-yet. A thread with nothing to change takes one `resolve THREAD TEXT` or
-`block`.
+edit changed the thread's anchored text; then `resolve THREAD` with no text,
+since the reply carries your words, or `block` when you need the user. The
+user sees your words and the change together, and the status lands last, so
+`resolved` never claims a change the user cannot see yet. A thread with
+nothing to change takes one `resolve THREAD TEXT` or `block`.
 
 Hold the status of the round's last thread until after the sweep: once the
 edits are done, run the tool with `--sweep /path/NAME.md`, repoint each

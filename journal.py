@@ -37,11 +37,11 @@ def fail(msg, code=1):
     sys.exit(code)
 
 
-def text_arg(value, what):
+def text_arg(value, what, hint=""):
     text = sys.stdin.read() if value == "-" else value
     text = text.strip()
     if not text:
-        fail("%s is empty" % what, 2)
+        fail("%s is empty%s" % (what, hint), 2)
     return text
 
 
@@ -92,7 +92,8 @@ def events(args):
     if args.action == "resolve":
         event = {"thread": args.thread}
         if args.text is not None:
-            event["body"] = text_arg(args.text, "the reply")
+            event["body"] = text_arg(args.text, "the reply",
+                                     "; leave TEXT out to resolve without one")
         event["status"] = "resolved"
         return [event]
     if args.action == "block":
