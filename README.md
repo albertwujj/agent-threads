@@ -7,8 +7,8 @@ Agent instructions and a file protocol for [plans and documents](https://github.
 Ask your agent:
 
 ```text
-Clone the repository below into ai/ in this project, and leave ai/ out
-of .gitignore.
+Clone the repository below into ai/agent-threads in this project, and
+leave ai/ out of .gitignore.
 https://github.com/albertwujj/agent-threads
 ```
 
