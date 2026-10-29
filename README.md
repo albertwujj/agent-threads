@@ -14,6 +14,8 @@ https://github.com/albertwujj/agent-threads
 
 One clone covers documents and reviews. Other locations work too ([placement](https://github.com/albertwujj/agent-term/blob/main/docs/conventions.md#placement)).
 
+Keep it a plain clone. `git -C ai/agent-threads pull` updates it, and in a git project it shows as one untracked `ai/` line; leave it uncommitted. Stripping its `.git` stops updates, and listing `ai/` in `.gitignore` hides its docs from `@` completion.
+
 ## Using it
 
 - **Documents.** Open a Markdown file in AgentTerm and comment or write directly on it.
