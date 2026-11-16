@@ -129,6 +129,15 @@ conceptual narrative is the point, and you have minimal restriction:
 - **Group by concept, not by file.** Related blocks from *different* files belong
   under one heading if they're understood together (e.g. a new function and its
   call site). Put several `:::diff` from several files in one section.
+- **Put a unit test right after the code it tests** when the test shows that
+  code's contract: what it accepts, what it refuses, its boundaries and edge
+  cases. Embed only the tests for that block (`L<start>-<end>`), in the same
+  section, with one line on what they pin. For example, the threshold parsing
+  code is followed by its tests for valid values, refused values and the cap.
+  The reviewer then checks the contract while the code is still in mind.
+  Do this without being asked. Put the remaining tests in a final *Tests*
+  section: end-to-end tests, expected-output files, fixtures, and tests that
+  span several sections.
 - **Order so the reader holds less in their head.** Put a change *before* the
   changes that depend on it — foundational first, dependents after.
 - **Explain the order — the dependency narrative.** Because *you* control order,
@@ -176,6 +185,11 @@ by** the server wiring below.
 
 :::diff src/limiter.py
 
+The tests pin that rule: admit at one token, refuse at zero, refill capped at
+capacity.
+
+:::diff tests/test_limiter.py L10-48
+
 The check slots into `handle()` between parse and auth; the existing order below
 (unchanged) is why it can sit there without touching auth.
 
@@ -194,8 +208,10 @@ I defaulted the refill to 10/s, which sheds traffic on the current p99 burst. Th
 alternative is 25/s — never sheds, but a real flood reaches auth. Say which you
 want; 10/s is the safer default and the one I'd keep.
 
-## Tests
-:::diff tests/test_limiter.py
+## End-to-end tests
+A flood against the running server, which no single section above covers.
+
+:::diff tests/test_server_flood.py
 ```
 
 ## Quality bar — self-check before handing it over
@@ -204,6 +220,7 @@ want; 10/s is the safer default and the one I'd keep.
 - [ ] **Trade-offs and undiscussed decisions called out** — each its own **`[unconfirmed] Decision:`** section, stating the choice, its cost, and the alternative.
 - [ ] A line near the top says only unconfirmed decisions need a response; settled choices retain `[confirmed] Decision:` headings.
 - [ ] Sections grouped **by concept**; related cross-file blocks together.
+- [ ] A unit test that shows a block's **contract** sits **right after that block**; only end-to-end and cross-cutting tests are left for a final section.
 - [ ] Order goes **foundational → dependent**; each section says **how it relates**.
 - [ ] Prose adds **why/relationships** — no restated code, no repeated code comments.
 - [ ] Change-talk (the delta's what/why) lives in the **package** — never as a code comment narrating the change.
