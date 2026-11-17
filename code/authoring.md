@@ -69,9 +69,13 @@ range: origin/main..add-rate-limiter   # branch (or SHA) tip — pinned, not HEA
 - **Headings** (`##`, `###`, …) — your sections and their nesting. The order of
   sections **is** the reading order (see *Ordering*).
 - **Prose** — your explanation, plain markdown.
-- **`:::diff <path>`** — embed that file's whole diff. **`:::diff <path>
-  L<start>-<end>`** — embed only the new-side line range (a block/hunk). The diff
-  is pulled live from git; you only reference it.
+- **`:::diff <path> L<start>-<end>`** — embed a selected new-side line range
+  from the file's diff. A range is required for every file type, including
+  Markdown; a directive without one is rejected. Choose the smallest coherent
+  passage that supports one review point, including the surrounding context
+  needed to judge it. The diff is pulled live from git; you only reference it.
+  For a deletion, select the next surviving line or the gap after the last line;
+  for a fully deleted file, use `L1-1`.
 - **`:::code <path> L<start>-<end>`** — embed that slice of the file as it stands
   at the range tip, with no diff. Use it for code the change depends on or copies:
   a callee the new code calls, the existing shape a new block follows. Slice it as
@@ -183,7 +187,7 @@ range: origin/main..add-rate-limiter
 The bucket admits a request only when it holds ≥ 1 token. Introduced first; **used
 by** the server wiring below.
 
-:::diff src/limiter.py
+:::diff src/limiter.py L40-60
 
 The tests pin that rule: admit at one token, refuse at zero, refill capped at
 capacity.
@@ -211,7 +215,7 @@ want; 10/s is the safer default and the one I'd keep.
 ## End-to-end tests
 A flood against the running server, which no single section above covers.
 
-:::diff tests/test_server_flood.py
+:::diff tests/test_server_flood.py L10-42
 ```
 
 ## Quality bar — self-check before handing it over
@@ -225,5 +229,5 @@ A flood against the running server, which no single section above covers.
 - [ ] Prose adds **why/relationships** — no restated code, no repeated code comments.
 - [ ] Change-talk (the delta's what/why) lives in the **package** — never as a code comment narrating the change.
 - [ ] Code that needed explaining got a **code comment** (part of the change), not review prose.
-- [ ] Non-obvious blocks called out at **line granularity**; routine ones whole-file.
+- [ ] Every diff and context embed has an **explicit line range**, focused on one review point; routine changes that need no judgment are omitted.
 - [ ] Unchanged code the reader needs to judge the change (a callee, a shape copied) shown with **`:::code`**, sliced tight, the why in the paragraph before it.
