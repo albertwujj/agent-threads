@@ -63,11 +63,24 @@ A later terminal correction to a sent comment or edit continues the same
 thread, even without a new store pointer. Follow `../contract.md` (Terminal
 corrections).
 
-1. **Read the store** (the package's `-comments.json` sibling — read-only for
-   you; everything you say or set goes to the `-agent.jsonl` journal beside
-   it, written with `../journal.py`). The files, how you write to them, and
-   the status lifecycle are the shared contract in **`../contract.md`** — the
-   same model carries markdown-document threads (`../md/user-intent.md`).
+1. **List sent threads** with [open-threads.py](open-threads.py) beside this runbook.
+   Use the store path from the terminal message or the package's `-comments.json`
+   sibling when the user tells you about the review directly.
+
+   ```text
+   python3 "/path/to/agent-threads/code/open-threads.py" "/path/to/branch-comments.json"
+   ```
+
+   The tool reads the store and journal together. It shows threads awaiting you
+   with their anchors and sent conversation history. If a just-sent batch shows
+   no pending threads, rerun the tool to pick up the viewer's send stamp. Use
+   `--thread ID` for a named reminder or correction and `--all` to find a thread
+   in sent history, including resolved threads. On a reminder, act only if the
+   named thread still needs you. For a terminal correction, use the rules in
+   [the shared contract](../contract.md#terminal-corrections).
+
+   Write replies and updates to the journal with `../journal.py`. The file
+   format and status lifecycle are in [the shared contract](../contract.md).
    Review anchors add `path`, `side` and `line` (`--path`, `--side`, `--line`
    on `anchor`): side and line on code lines, a diff cell or a `:::code` slice
    (always side `new`); a quote on prose, the commit or the preview has none,
@@ -86,7 +99,8 @@ corrections).
    tracked changes flag the review out of date (red banner) instead of showing your update. If the
    package's `range:` pins the tip by SHA, advance it. **Re-render** happens when you **edit the
    package** (the open review auto-refreshes), when it's re-opened (the `review://` link), or on
-   refocus — it re-anchors every comment against the new diff and stamps `anchor_status`:
+   refocus — it re-anchors every comment against the new diff and stamps `anchor_status`.
+   Run `open-threads.py` with `--all` to see anchor status on sent threads:
    - `ok` / `moved` — handled for you (code line auto-updated; a quote still on the page stays put).
    - `lost` — the anchored code/quote is gone (you rewrote or removed it). Repoint it
      with `anchor` (`--snippet`, and `--line` for code) to where the concept now lives
